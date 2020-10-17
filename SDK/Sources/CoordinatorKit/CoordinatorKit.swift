@@ -64,6 +64,18 @@ public enum PresentationController {
         case .tab(let vc): return vc.navigationController
         }
     }
+
+    public func modal(_ vc: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
+        viewController.present(vc, animated: animated, completion: completion)
+    }
+
+    public func push(_ vc: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
+        guard let nc = navigationController else {
+            fatalError("There is no navigationController in stack")
+        }
+
+        nc.pushViewController(vc, animated: animated, completion)
+    }
 }
 
 public extension PresentationController {

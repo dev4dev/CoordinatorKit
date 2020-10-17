@@ -18,6 +18,14 @@ final class SettingsCoordinator: BaseCoordinator<UIViewController, Void> {
         vc.completionCallback = { [unowned self] in
             self.complete()
         }
+        vc.extraCallback = { [unowned self] in
+            self.extra()
+        }
         present(controller: vc, style: style)
+    }
+
+    private func extra() {
+        let vc = SettingsExtraViewController()
+        presentationController.push(vc, animated: true)
     }
 }

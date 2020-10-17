@@ -13,7 +13,7 @@ final class InventoryViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
 
-        self.tabBarItem = .init(title: "Inventory", image: nil, selectedImage: nil)
+        self.tabBarItem = .init(tabBarSystemItem: .featured, tag: 1)
     }
 
     required init?(coder aDecoder: NSCoder) {

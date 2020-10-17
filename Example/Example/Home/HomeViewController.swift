@@ -29,7 +29,7 @@ final class HomeViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
 
-        self.tabBarItem = .init(title: "Home", image: nil, tag: 0)
+        self.tabBarItem = .init(tabBarSystemItem: .search, tag: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {

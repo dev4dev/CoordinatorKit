@@ -13,6 +13,7 @@ final class SettingsViewController: UIViewController {
     }
 
     var completionCallback: () -> Void = {}
+    var extraCallback: () -> Void = {}
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,19 @@ final class SettingsViewController: UIViewController {
         view.addSubview(b)
         b.snp.makeConstraints { make in
             make.center.equalToSuperview()
+        }
+
+        let extra = UIButton().then {
+            $0.setTitle("Extra", for: .normal)
+            $0.setTitleColor(.black, for: .normal)
+        }
+        extra.addAction(.init(handler: { [unowned self] _ in
+            self.extraCallback()
+        }), for: .touchUpInside)
+        view.addSubview(extra)
+        extra.snp.makeConstraints { make in
+            make.top.equalTo(b.snp.bottom).offset(20.0)
+            make.centerX.equalToSuperview()
         }
     }
 
