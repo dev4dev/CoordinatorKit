@@ -136,6 +136,9 @@ public protocol Coordinator: class {
 }
 
 public extension Coordinator {
+
+    /// Dismiss coordinator
+    /// - Parameter animated: Animated
     func dismiss(animated: Bool) {
         dismiss(animated: animated, nil)
     }
@@ -324,24 +327,41 @@ public extension BaseCoordinator where ResponseData == Void {
 // MARK: - TabCoordinator
 
 open class TabCoordinator<ResponseData>: BaseCoordinator<UITabBarController, ResponseData> {
-    public override var presented: Coordinator? {
-        let index = keyViewController.selectedIndex
-        let activeChild = childCoordinators[safeIndex: index]
-        let p = activeChild?.presented
-        return p ?? activeChild
+    private var tabCoordinators: [Coordinator] = []
+
+    override public var presented: Coordinator? {
+        if let cc = childCoordinators.last {
+            return cc
+        } else {
+            let index = keyViewController.selectedIndex
+            let activeChild = tabCoordinators[safeIndex: index]
+            return activeChild?.presented
+        }
+    }
+
+    /// Method used for setting up Tab Controller tabs from Coordinators
+    /// - Parameters:
+    ///   - controller: Tab Controller Instance
+    ///   - coordinators: Child coordinators
+    public func setupTabs(controller: UITabBarController, coordinators: [Coordinator]) {
+        coordinators.forEach { coordinator in
+            presentTab(coordinator: coordinator, controller: controller)
+        }
     }
 
     /// Method used to present child coordinator on TabCoordinator as tabs
     /// - Parameters:
     ///   - coordinators: Array of child coordinators
     ///   - style: Presentation style
-    public func present(coordinators: [Coordinator], style: PresentationStyle) {
-        let controller = UITabBarController()
-
-        coordinators.forEach { coordinator in
-            present(coordinator: coordinator, style: .tab(controller))
+    func presentTab(coordinator: Coordinator, controller: UITabBarController) {
+        guard tabCoordinators.first(where: { $0 === coordinator}) == nil else { return }
+        coordinator._onDeinit = { [weak self, unowned coordinator] in
+            self?._remove(coordinator: coordinator)
         }
+        tabCoordinators.append(coordinator)
 
-        present(controller: controller, style: style)
+        coordinator.parent = self
+        coordinator.start(style: .tab(controller))
+        print("present: ", coordinator)
     }
 }

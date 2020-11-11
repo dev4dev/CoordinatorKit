@@ -10,9 +10,12 @@ import CoordinatorKit
 
 final class RootCoordinator: TabCoordinator<Void> {
     override func start(style: PresentationStyle) {
-        present(coordinators: [
+        let vc = UITabBarController()
+        setupTabs(controller: vc, coordinators: [
             HomeCoordinator(),
             InventoryCoordinator()
-        ], style: style)
+        ])
+
+        present(controller: vc, style: style)
     }
 }
