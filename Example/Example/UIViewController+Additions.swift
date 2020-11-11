@@ -1,13 +1,13 @@
 //
-//  File.swift
-//  
+//  UIViewController+Additions.swift
+//  Example
 //
-//  Created by Alex Antonyuk on 05.10.2020.
+//  Created by Alex Antonyuk on 11.11.2020.
 //
 
 import UIKit
 
-public extension UIViewController {
+extension UIViewController {
     @objc func navigated(fullscreen: Bool = true) -> UINavigationController {
         let nc = UINavigationController(rootViewController: self)
         if fullscreen {
@@ -15,7 +15,7 @@ public extension UIViewController {
         }
         return nc
     }
-    
+
     @IBAction func smartDismiss() {
         if let nc = navigationController {
             if nc.viewControllers.count == 1 {

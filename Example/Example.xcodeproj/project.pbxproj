@@ -20,6 +20,7 @@
 		638CFADF252BBAEB00938966 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFADE252BBAEB00938966 /* SettingsCoordinator.swift */; };
 		638CFAE2252BBB0200938966 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFAE1252BBB0200938966 /* SettingsViewController.swift */; };
 		6390BD05255C22CF00F95494 /* CoordinatorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6390BD04255C22CF00F95494 /* CoordinatorKit */; };
+		6390BD10255C247E00F95494 /* UIViewController+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */; };
 		6397F5E5253AC5EA005F785F /* SettingsExtraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6397F5E4253AC5EA005F785F /* SettingsExtraViewController.swift */; };
 		E45707AB22A9F4DE0154C2A5 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F59A231AC9A68B3DC827892B /* Pods_Example.framework */; };
 /* End PBXBuildFile section */
@@ -41,6 +42,7 @@
 		638CFADE252BBAEB00938966 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		638CFAE1252BBB0200938966 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		6390BCFB255C22A400F95494 /* CoordinatorKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CoordinatorKit; path = ..; sourceTree = "<group>"; };
+		6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Additions.swift"; sourceTree = "<group>"; };
 		6397F5E4253AC5EA005F785F /* SettingsExtraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsExtraViewController.swift; sourceTree = "<group>"; };
 		66BB4BCC7D6FC1000C774B99 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		F59A231AC9A68B3DC827892B /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +101,7 @@
 				638CFAAB252BAAA500938966 /* Assets.xcassets */,
 				638CFAAD252BAAA500938966 /* LaunchScreen.storyboard */,
 				638CFAB0252BAAA500938966 /* Info.plist */,
+				6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				638CFADF252BBAEB00938966 /* SettingsCoordinator.swift in Sources */,
 				638CFAA3252BAAA400938966 /* AppDelegate.swift in Sources */,
 				638CFACC252BAFDC00938966 /* InventoryCoordinator.swift in Sources */,
+				6390BD10255C247E00F95494 /* UIViewController+Additions.swift in Sources */,
 				638CFAA5252BAAA400938966 /* SceneDelegate.swift in Sources */,
 				6397F5E5253AC5EA005F785F /* SettingsExtraViewController.swift in Sources */,
 				638CFAC8252BAF9B00938966 /* HomeCoordinator.swift in Sources */,

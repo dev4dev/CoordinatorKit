@@ -12,14 +12,14 @@ extension UINavigationController {
     /// Pop last view controller from the navigation stack, with animation and completion block
     /// Use CATransaction to provide a completion block when the animation is complete
     /// - parameter completion: callback block to execute after pop operation is complete
-    public func popViewController(animated: Bool = true, _ completion: (() -> Void)?) {
+    func popViewController(animated: Bool = true, _ completion: (() -> Void)?) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completion)
         self.popViewController(animated: animated)
         CATransaction.commit()
     }
 
-    public func pushViewController(_ vc: UIViewController, animated: Bool = true, _ completion: (() -> Void)?) {
+    func pushViewController(_ vc: UIViewController, animated: Bool = true, _ completion: (() -> Void)?) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completion)
         self.pushViewController(vc, animated: animated)
