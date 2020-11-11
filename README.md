@@ -1,1 +1,3 @@
-Coordinator Kit
+# CoordinatorKit
+
+A description of this package.
