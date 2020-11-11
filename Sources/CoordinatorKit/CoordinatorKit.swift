@@ -154,7 +154,7 @@ public extension Coordinator {
 // MARK: - BaseCoordintor
 open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coordinator {
     fileprivate var childCoordinators: [Coordinator] = []
-    unowned var keyViewController: KeyController! {
+    public unowned var keyViewController: KeyController! {
         didSet {
             keyViewController.setDeinitNotification { [weak self] in
                 self?._onDeinit?()
