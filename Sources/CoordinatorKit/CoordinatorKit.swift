@@ -30,7 +30,7 @@ public enum PresentationStyle {
             self.transitioningDelegate = delegate
         }
 
-        static func custom(delegate: UIViewControllerTransitioningDelegate) -> ModalParameters {
+        public static func custom(delegate: UIViewControllerTransitioningDelegate) -> ModalParameters {
             .init(navigated: false, presentation: .custom, delegate: delegate)
         }
     }
