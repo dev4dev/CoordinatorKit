@@ -47,7 +47,7 @@ public enum PresentationController {
     case tab(UITabBarController)
     case split(UISplitViewController)
 
-    fileprivate var viewController: UIViewController {
+    public var viewController: UIViewController {
         switch self {
         case .navigation(let vc): return vc
         case .regular(let vc): return vc
@@ -56,12 +56,19 @@ public enum PresentationController {
         }
     }
 
-    fileprivate var navigationController: UINavigationController? {
+    public var navigationController: UINavigationController? {
         switch self {
         case .navigation(let vc): return vc
         case .regular(let vc): return vc.navigationController
         case .split(let vc): return vc.navigationController
         case .tab(let vc): return vc.navigationController
+        }
+    }
+
+    public var tabBarController: UITabBarController? {
+        switch self {
+        case .navigation, .regular, .split: return nil
+        case .tab(let vc): return vc
         }
     }
 
