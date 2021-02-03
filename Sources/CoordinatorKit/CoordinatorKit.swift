@@ -155,6 +155,10 @@ public extension Coordinator {
 }
 
 // MARK: - BaseCoordintor
+/// A Base Coordinator which should be inherited
+/// You need to specify generic parameters for it:
+/// - 1: KeyController - a type of key controller. Usually it can be UIViewController, or specific.
+/// - 2: ResponseData - a type of returning data if your coordinator should return anything on its completion
 open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coordinator {
     fileprivate(set) public var childred: [Coordinator] = []
     public unowned var keyViewController: KeyController! {
