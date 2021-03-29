@@ -161,9 +161,9 @@ public extension Coordinator {
 /// - 2: ResponseData - a type of returning data if your coordinator should return anything on its completion
 open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coordinator {
     fileprivate(set) public var childred: [Coordinator] = []
-    public unowned var keyViewController: KeyController! {
+    public unowned var keyViewController: KeyController? {
         didSet {
-            keyViewController.setDeinitNotification { [weak self] in
+            keyViewController?.setDeinitNotification { [weak self] in
                 self?._onDeinit?()
             }
         }
@@ -177,10 +177,20 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         case let vc as UISplitViewController:
             return .split(vc)
         default:
-            if let nc = keyViewController.navigationController {
+            if let nc = keyViewController?.navigationController {
                 return .navigation(nc)
             } else {
-                return .regular(keyViewController)
+                if let vc = keyViewController {
+                    return .regular(vc)
+                } else {
+                    preconditionFailure("""
+
+                        🔥>> Coordinator \(self) does not have a key controller
+                        🔥>> Make sure that you overrode `start()` method and called `present(controller:style:)`
+                        🔥>> from it with a relevant view contoller
+
+                    """)
+                }
             }
         }
     }
@@ -222,10 +232,21 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     }
 
     open func start(style: PresentationStyle) {
-        fatalError("Should be subclassed")
+        fatalError("""
+
+            🔥>> Please override this method
+            🔥>> and call `present(controller:style)` with a relevant view controller
+
+            """)
     }
 
     public func present(controller: KeyController, style: PresentationStyle, completion:  @escaping () -> Void = {}) {
+        assert(keyViewController == nil, """
+
+            🔥>> This method should be called only once from `start(style:)` method of a coordinator
+            🔥>> To present another view controller, please use `presentationController.(modal|push)`
+
+            """)
         keyViewController = controller
 
         switch style {
@@ -238,20 +259,20 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         case .push:
             let pc = parent!.presentationController
             if let nc = pc.navigationController {
-                nc.pushViewController(keyViewController, animated: true)
+                nc.pushViewController(controller, animated: true)
             } else {
                 fatalError("Trying to present \(controller) into \(pc) without navigation controller")
             }
         case let .pushOrModal(parameters: parameters):
             let pc = parent!.presentationController
             if let nc = pc.navigationController {
-                nc.pushViewController(keyViewController, animated: true)
+                nc.pushViewController(controller, animated: true)
             } else {
                 presentModal(parent: pc.viewController, parameters: parameters, completion: completion)
             }
         case .tab(let tabBarController):
             var vcs: [UIViewController] = tabBarController.viewControllers ?? []
-            vcs.append(keyViewController)
+            vcs.append(controller)
             tabBarController.viewControllers = vcs
         }
 
@@ -276,14 +297,14 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
             return
         }
 
-        if let nc = keyViewController.navigationController {
+        if let nc = keyViewController?.navigationController {
             if nc.viewControllers.first == keyViewController {
                 nc.dismiss(animated: true, completion: done)
             } else {
                 nc.popViewController(animated: animated, done)
             }
         } else {
-            keyViewController.dismiss(animated: animated, completion: done)
+            keyViewController?.dismiss(animated: animated, completion: done)
         }
     }
 
@@ -292,6 +313,14 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     }
 
     private func presentModal(parent: UIViewController, parameters: PresentationStyle.ModalParameters, completion:  @escaping () -> Void = {}) {
+        guard let keyViewController = keyViewController else {
+            preconditionFailure("""
+
+                🔥>> Coordinator \(self) does not have a key controller
+                🔥>> Check your `start(style:)` method calls `present(controller:style)` with a relevant view conroller
+
+                """)
+        }
         parameters.apply(to: keyViewController)
         if parameters.navigated {
             let nc = UINavigationController(rootViewController: keyViewController)
@@ -305,7 +334,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     }
 
     public func present(coordinator: Coordinator, style: PresentationStyle) {
-        guard childred.first(where: { $0 === coordinator}) == nil else { return }
+        guard !childred.contains(where: { $0 === coordinator }) else { return }
         guard coordinator._onDeinit == nil else {
             fatalError("onDeinit shouldn't be set manually")
         }
@@ -344,8 +373,8 @@ open class TabCoordinator<ResponseData>: BaseCoordinator<UITabBarController, Res
     private var tabCoordinators: [Coordinator] = []
 
     public var activeCoordinator: Coordinator? {
-        guard keyViewController.selectedIndex != NSNotFound else { return nil }
-        let index = keyViewController.selectedIndex
+        guard keyViewController?.selectedIndex != NSNotFound else { return nil }
+        guard let index = keyViewController?.selectedIndex else { return nil }
         let activeChild = tabCoordinators[safeIndex: index]
         return activeChild
     }
