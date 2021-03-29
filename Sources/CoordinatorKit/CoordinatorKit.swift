@@ -161,7 +161,7 @@ public extension Coordinator {
 /// - 2: ResponseData - a type of returning data if your coordinator should return anything on its completion
 open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coordinator {
     fileprivate(set) public var childred: [Coordinator] = []
-    public unowned var keyViewController: KeyController? {
+    public unowned var keyViewController: KeyController! {
         didSet {
             keyViewController?.setDeinitNotification { [weak self] in
                 self?._onDeinit?()
