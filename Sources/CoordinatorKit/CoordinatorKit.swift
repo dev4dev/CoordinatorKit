@@ -101,7 +101,7 @@ public extension PresentationController {
     }
 }
 
-public protocol Coordinator: class {
+public protocol Coordinator: AnyObject {
 
     /// Presentation controller to be used as a parameter in child coordinators presentation methods
     var presentationController: PresentationController { get }
