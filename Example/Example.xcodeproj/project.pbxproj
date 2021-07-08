@@ -22,11 +22,12 @@
 		6390BD05255C22CF00F95494 /* CoordinatorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6390BD04255C22CF00F95494 /* CoordinatorKit */; };
 		6390BD10255C247E00F95494 /* UIViewController+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */; };
 		6397F5E5253AC5EA005F785F /* SettingsExtraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6397F5E4253AC5EA005F785F /* SettingsExtraViewController.swift */; };
-		E45707AB22A9F4DE0154C2A5 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F59A231AC9A68B3DC827892B /* Pods_Example.framework */; };
+		63AECFF0269780100069F100 /* MultiCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AECFEF269780100069F100 /* MultiCoordinator.swift */; };
+		63AECFF2269780380069F100 /* MultiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AECFF1269780380069F100 /* MultiViewController.swift */; };
+		63FDF9A22697811300CC2F01 /* CommonLib in Frameworks */ = {isa = PBXBuildFile; productRef = 63FDF9A12697811300CC2F01 /* CommonLib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		30C67A8CED2AD89A19FBB3C8 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		638CFA9F252BAAA400938966 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		638CFAA2252BAAA400938966 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		638CFAA4252BAAA400938966 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,8 +45,8 @@
 		6390BCFB255C22A400F95494 /* CoordinatorKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CoordinatorKit; path = ..; sourceTree = "<group>"; };
 		6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Additions.swift"; sourceTree = "<group>"; };
 		6397F5E4253AC5EA005F785F /* SettingsExtraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsExtraViewController.swift; sourceTree = "<group>"; };
-		66BB4BCC7D6FC1000C774B99 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		F59A231AC9A68B3DC827892B /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63AECFEF269780100069F100 /* MultiCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiCoordinator.swift; sourceTree = "<group>"; };
+		63AECFF1269780380069F100 /* MultiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,30 +55,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				6390BD05255C22CF00F95494 /* CoordinatorKit in Frameworks */,
-				E45707AB22A9F4DE0154C2A5 /* Pods_Example.framework in Frameworks */,
+				63FDF9A22697811300CC2F01 /* CommonLib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1E8558F5E1060461F5442620 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				30C67A8CED2AD89A19FBB3C8 /* Pods-Example.debug.xcconfig */,
-				66BB4BCC7D6FC1000C774B99 /* Pods-Example.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		638CFA96252BAAA400938966 = {
 			isa = PBXGroup;
 			children = (
 				6390BCFB255C22A400F95494 /* CoordinatorKit */,
 				638CFAA1252BAAA400938966 /* Example */,
 				638CFAA0252BAAA400938966 /* Products */,
-				638CFAB9252BAAB700938966 /* Frameworks */,
-				1E8558F5E1060461F5442620 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,6 +82,7 @@
 		638CFAA1252BAAA400938966 /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				63AECFEE269780050069F100 /* Multi */,
 				638CFADD252BBAE100938966 /* Settings */,
 				638CFACA252BAFD000938966 /* Inventory */,
 				638CFAC6252BAF9200938966 /* Home */,
@@ -104,14 +95,6 @@
 				6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */,
 			);
 			path = Example;
-			sourceTree = "<group>";
-		};
-		638CFAB9252BAAB700938966 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F59A231AC9A68B3DC827892B /* Pods_Example.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		638CFABD252BAAC400938966 /* Root */ = {
@@ -151,6 +134,15 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		63AECFEE269780050069F100 /* Multi */ = {
+			isa = PBXGroup;
+			children = (
+				63AECFEF269780100069F100 /* MultiCoordinator.swift */,
+				63AECFF1269780380069F100 /* MultiViewController.swift */,
+			);
+			path = Multi;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -158,11 +150,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 638CFAB3252BAAA500938966 /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
-				1F109B4114542919B2E588EC /* [CP] Check Pods Manifest.lock */,
 				638CFA9B252BAAA400938966 /* Sources */,
 				638CFA9C252BAAA400938966 /* Frameworks */,
 				638CFA9D252BAAA400938966 /* Resources */,
-				DD31F257E00D4AC157B913B9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -171,6 +161,7 @@
 			name = Example;
 			packageProductDependencies = (
 				6390BD04255C22CF00F95494 /* CoordinatorKit */,
+				63FDF9A12697811300CC2F01 /* CommonLib */,
 			);
 			productName = Example;
 			productReference = 638CFA9F252BAAA400938966 /* Example.app */;
@@ -199,6 +190,9 @@
 				Base,
 			);
 			mainGroup = 638CFA96252BAAA400938966;
+			packageReferences = (
+				63FDF9A02697811300CC2F01 /* XCRemoteSwiftPackageReference "CommonLib_iOS" */,
+			);
 			productRefGroup = 638CFAA0252BAAA400938966 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -220,48 +214,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		1F109B4114542919B2E588EC /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Example-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DD31F257E00D4AC157B913B9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		638CFA9B252BAAA400938966 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -273,12 +225,14 @@
 				638CFAE2252BBB0200938966 /* SettingsViewController.swift in Sources */,
 				638CFAD0252BB07800938966 /* HomeViewController.swift in Sources */,
 				638CFADF252BBAEB00938966 /* SettingsCoordinator.swift in Sources */,
+				63AECFF2269780380069F100 /* MultiViewController.swift in Sources */,
 				638CFAA3252BAAA400938966 /* AppDelegate.swift in Sources */,
 				638CFACC252BAFDC00938966 /* InventoryCoordinator.swift in Sources */,
 				6390BD10255C247E00F95494 /* UIViewController+Additions.swift in Sources */,
 				638CFAA5252BAAA400938966 /* SceneDelegate.swift in Sources */,
 				6397F5E5253AC5EA005F785F /* SettingsExtraViewController.swift in Sources */,
 				638CFAC8252BAF9B00938966 /* HomeCoordinator.swift in Sources */,
+				63AECFF0269780100069F100 /* MultiCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,7 +368,6 @@
 		};
 		638CFAB4252BAAA500938966 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30C67A8CED2AD89A19FBB3C8 /* Pods-Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -433,7 +386,6 @@
 		};
 		638CFAB5252BAAA500938966 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 66BB4BCC7D6FC1000C774B99 /* Pods-Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -473,10 +425,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		63FDF9A02697811300CC2F01 /* XCRemoteSwiftPackageReference "CommonLib_iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:hathway/CommonLib_iOS.git";
+			requirement = {
+				branch = spm;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		6390BD04255C22CF00F95494 /* CoordinatorKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoordinatorKit;
+		};
+		63FDF9A12697811300CC2F01 /* CommonLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63FDF9A02697811300CC2F01 /* XCRemoteSwiftPackageReference "CommonLib_iOS" */;
+			productName = CommonLib;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

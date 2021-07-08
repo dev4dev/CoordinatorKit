@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Then
+import CommonLib
 
 final class InventoryViewController: UIViewController {
 

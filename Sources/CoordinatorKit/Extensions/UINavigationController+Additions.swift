@@ -25,6 +25,13 @@ extension UINavigationController {
         self.pushViewController(vc, animated: animated)
         CATransaction.commit()
     }
+
+    func popToViewController(_ vc: UIViewController, animated: Bool = true, _ completion: (() -> Void)?) {
+        CATransaction.begin()
+        CATransaction.setCompletionBlock(completion)
+        self.popToViewController(vc, animated: animated)
+        CATransaction.commit()
+    }
 }
 
 public extension UINavigationController {

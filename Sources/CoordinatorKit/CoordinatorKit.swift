@@ -110,7 +110,7 @@ public protocol Coordinator: AnyObject {
     var parent: Coordinator? { get set }
 
     /// Children Coordinators
-    var childred: [Coordinator] { get }
+    var children: [Coordinator] { get }
 
     /// Service callback, shouldn't be used from a client code
     var _onDeinit: (() -> Void)? { get set }
@@ -160,7 +160,7 @@ public extension Coordinator {
 /// - 1: KeyController - a type of key controller. Usually it can be UIViewController, or specific.
 /// - 2: ResponseData - a type of returning data if your coordinator should return anything on its completion
 open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coordinator {
-    fileprivate(set) public var childred: [Coordinator] = []
+    fileprivate(set) public var children: [Coordinator] = []
     public unowned var keyViewController: KeyController! {
         didSet {
             keyViewController?.setDeinitNotification { [weak self] in
@@ -200,7 +200,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 
     /// Top coordinator being presented by this coordinator
     public var presented: Coordinator? {
-        var result = childred.last
+        var result = children.last
 
         while let c = result?.presented {
             result = c
@@ -301,7 +301,12 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
             if nc.viewControllers.first == keyViewController {
                 nc.dismiss(animated: true, completion: done)
             } else {
-                nc.popViewController(animated: animated, done)
+                if let index = nc.viewControllers.firstIndex(of: keyViewController) {
+                    let previous = nc.viewControllers[index - 1]
+                    nc.popToViewController(previous, animated: true, done)
+                } else {
+                    assertionFailure("Inconsistent state: Basically impossible")
+                }
             }
         } else {
             keyViewController?.dismiss(animated: animated, completion: done)
@@ -309,7 +314,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     }
 
     public func popChildCoordinator(animated: Bool, _ completion: @escaping () -> Void = {}) {
-        childred.last?.dismiss(animated: animated, completion)
+        children.last?.dismiss(animated: animated, completion)
     }
 
     private func presentModal(parent: UIViewController, parameters: PresentationStyle.ModalParameters, completion:  @escaping () -> Void = {}) {
@@ -334,22 +339,22 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     }
 
     public func present(coordinator: Coordinator, style: PresentationStyle) {
-        guard !childred.contains(where: { $0 === coordinator }) else { return }
+        guard !children.contains(where: { $0 === coordinator }) else { return }
         guard coordinator._onDeinit == nil else {
             fatalError("onDeinit shouldn't be set manually")
         }
         coordinator._onDeinit = { [weak self, unowned coordinator] in
             self?._remove(coordinator: coordinator)
         }
-        childred.append(coordinator)
+        children.append(coordinator)
 
         coordinator.parent = self
         coordinator.start(style: style)
     }
 
     public func _remove(coordinator: Coordinator) {
-        guard let index = childred.firstIndex(where: { $0 === coordinator }) else { return }
-        childred.remove(at: index)
+        guard let index = children.firstIndex(where: { $0 === coordinator }) else { return }
+        children.remove(at: index)
         (coordinator as? BaseCoordinator)?.notifyDismissEvents()
     }
 
@@ -380,7 +385,7 @@ open class TabCoordinator<ResponseData>: BaseCoordinator<UITabBarController, Res
     }
 
     override public var presented: Coordinator? {
-        if let cc = childred.last {
+        if let cc = children.last {
             return cc
         } else {
             return activeCoordinator?.presented

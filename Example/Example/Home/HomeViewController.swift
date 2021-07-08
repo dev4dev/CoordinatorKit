@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Then
+import CommonLib
 import SnapKit
 
 final class HomeViewController: UIViewController {
@@ -21,6 +21,10 @@ final class HomeViewController: UIViewController {
     }
     let pushButton = UIButton().then {
         $0.setTitle("Modal Push", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+    }
+    let multiButton = UIButton().then {
+        $0.setTitle("Multi", for: .normal)
         $0.setTitleColor(.black, for: .normal)
     }
 
@@ -42,7 +46,7 @@ final class HomeViewController: UIViewController {
         view.backgroundColor = .white
         navigationItem.title = "Home"
 
-        let stack = UIStackView(arrangedSubviews: [modalNavButton, modalRawButton, pushButton])
+        let stack = UIStackView(arrangedSubviews: [modalNavButton, modalRawButton, pushButton, multiButton])
         stack.axis = .vertical
         stack.spacing = 10.0
 
@@ -54,6 +58,9 @@ final class HomeViewController: UIViewController {
         }), for: .touchUpInside)
         pushButton.addAction(.init(handler: { [unowned self] _ in
             self.action(.push)
+        }), for: .touchUpInside)
+        multiButton.addAction(.init(handler: { [unowned self] _ in
+            self.action(.multi)
         }), for: .touchUpInside)
 
         view.addSubview(stack)

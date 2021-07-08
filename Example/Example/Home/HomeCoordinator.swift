@@ -13,6 +13,7 @@ enum SettingsStyle {
     case modalNav
     case modalRaw
     case push
+    case multi
 }
 
 final class HomeCoordinator: BaseCoordinator<UIViewController, Void> {
@@ -50,7 +51,9 @@ final class HomeCoordinator: BaseCoordinator<UIViewController, Void> {
         case .push:
             // push
             present(coordinator: c, style: .push)
-
+        case .multi:
+            let c = MultiCoordinator()
+            present(coordinator: c, style: .push)
         }
     }
 }
