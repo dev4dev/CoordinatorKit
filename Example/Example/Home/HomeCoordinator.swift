@@ -14,6 +14,7 @@ enum SettingsStyle {
     case modalRaw
     case push
     case multi
+    case mixed
 }
 
 final class HomeCoordinator: BaseCoordinator<UIViewController, Void> {
@@ -53,6 +54,9 @@ final class HomeCoordinator: BaseCoordinator<UIViewController, Void> {
             present(coordinator: c, style: .push)
         case .multi:
             let c = MultiCoordinator()
+            present(coordinator: c, style: .push)
+        case .mixed:
+            let c = MixedCoordinator()
             present(coordinator: c, style: .push)
         }
     }

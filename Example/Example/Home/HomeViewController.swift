@@ -27,6 +27,10 @@ final class HomeViewController: UIViewController {
         $0.setTitle("Multi", for: .normal)
         $0.setTitleColor(.black, for: .normal)
     }
+    let mixedButton = UIButton().then {
+        $0.setTitle("Mixed", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+    }
 
     var action: (SettingsStyle) -> Void = { _ in }
 
@@ -46,7 +50,7 @@ final class HomeViewController: UIViewController {
         view.backgroundColor = .white
         navigationItem.title = "Home"
 
-        let stack = UIStackView(arrangedSubviews: [modalNavButton, modalRawButton, pushButton, multiButton])
+        let stack = UIStackView(arrangedSubviews: [modalNavButton, modalRawButton, pushButton, multiButton, mixedButton])
         stack.axis = .vertical
         stack.spacing = 10.0
 
@@ -61,6 +65,9 @@ final class HomeViewController: UIViewController {
         }), for: .touchUpInside)
         multiButton.addAction(.init(handler: { [unowned self] _ in
             self.action(.multi)
+        }), for: .touchUpInside)
+        mixedButton.addAction(.init(handler: { [unowned self] _ in
+            self.action(.mixed)
         }), for: .touchUpInside)
 
         view.addSubview(stack)
