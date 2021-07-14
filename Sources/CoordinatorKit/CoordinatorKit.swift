@@ -297,6 +297,8 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
             return
         }
 
+        keyViewController.presentedViewController?.dismiss(animated: animated)
+
         if let nc = keyViewController?.navigationController {
             if nc.viewControllers.first == keyViewController {
                 nc.dismiss(animated: true, completion: done)
