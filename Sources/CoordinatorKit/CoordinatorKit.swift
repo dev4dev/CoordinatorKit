@@ -301,11 +301,11 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 
         if let nc = keyViewController?.navigationController {
             if nc.viewControllers.first == keyViewController {
-                nc.dismiss(animated: true, completion: done)
+                nc.dismiss(animated: animated, completion: done)
             } else {
                 if let index = nc.viewControllers.firstIndex(of: keyViewController) {
                     let previous = nc.viewControllers[index - 1]
-                    nc.popToViewController(previous, animated: true, done)
+                    nc.popToViewController(previous, animated: animated, done)
                 } else {
                     assertionFailure("Inconsistent state: Basically impossible")
                 }
