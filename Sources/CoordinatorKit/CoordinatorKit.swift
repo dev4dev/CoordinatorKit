@@ -278,11 +278,12 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 
     }
 
-    public func complete(data: ResponseData, animated: Bool = true) {
+    public func complete(data: ResponseData, animated: Bool = true, _ completion: (() -> Void)? = nil) {
         dismiss(animated: animated) {
             self.completionCallback?(data)
             self.completionSubject.send(data)
             self.completionSubject.send(completion: .finished)
+            completion?()
         }
     }
 
@@ -369,8 +370,8 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 }
 
 public extension BaseCoordinator where ResponseData == Void {
-    func complete(animated: Bool = true) {
-        complete(data: Void(), animated: animated)
+    func complete(animated: Bool = true, _ completion: (() -> Void)? = nil) {
+        complete(data: Void(), animated: animated, completion)
     }
 }
 
