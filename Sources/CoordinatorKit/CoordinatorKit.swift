@@ -161,7 +161,7 @@ public extension Coordinator {
 /// - 2: ResponseData - a type of returning data if your coordinator should return anything on its completion
 open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coordinator {
     fileprivate(set) public var children: [Coordinator] = []
-    public unowned var keyViewController: KeyController! {
+    public weak var keyViewController: KeyController? {
         didSet {
             keyViewController?.setDeinitNotification { [weak self] in
                 self?._onDeinit?()
@@ -293,14 +293,14 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
             completion?()
         }
 
-        guard keyViewController != nil else {
+        guard let keyViewController = keyViewController else {
             done()
             return
         }
 
         keyViewController.presentedViewController?.dismiss(animated: animated)
 
-        if let nc = keyViewController?.navigationController {
+        if let nc = keyViewController.navigationController {
             if nc.viewControllers.first == keyViewController {
                 nc.dismiss(animated: animated, completion: done)
             } else {
@@ -312,7 +312,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
                 }
             }
         } else {
-            keyViewController?.dismiss(animated: animated, completion: done)
+            keyViewController.dismiss(animated: animated, completion: done)
         }
     }
 
