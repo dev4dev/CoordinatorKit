@@ -168,7 +168,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
             }
         }
     }
-    public var presentationController: PresentationController {
+    open var presentationController: PresentationController {
         switch keyViewController {
         case let vc as UINavigationController:
             return .navigation(vc)
