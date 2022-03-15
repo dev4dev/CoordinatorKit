@@ -290,7 +290,6 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         let sendData: (ResponseData) -> Void = { data in
             self.completionCallback?(data)
             self.completionSubject.send(data)
-            self.completionSubject.send(completion: .finished)
         }
 
         let action = {
@@ -299,7 +298,10 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         }
 
         if shouldDismiss {
-            dismiss(animated: animated, action)
+            dismiss(animated: animated) {
+                action()
+                self.completionSubject.send(completion: .finished)
+            }
         } else {
             action()
         }
