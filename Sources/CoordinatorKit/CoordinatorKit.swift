@@ -278,15 +278,38 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 
     }
 
-    public func complete(data: ResponseData, animated: Bool = true, _ completion: (() -> Void)? = nil) {
-        dismiss(animated: animated) {
+    /// Complete coordinator
+    ///
+    /// Will send response data to a receiver
+    /// - Parameters:
+    ///   - shouldDismiss: Indicates whether the coordinator should dismiss on completion or not. Default: `true`
+    ///   - data: Result data to be returned
+    ///   - animated: Should dismissal be animated. Default: `true`
+    ///   - completion: Completion callback
+    public func complete(dismiss shouldDismiss: Bool = true, data: ResponseData, animated: Bool = true, _ completion: (() -> Void)? = nil) {
+        let sendData: (ResponseData) -> Void = { data in
             self.completionCallback?(data)
             self.completionSubject.send(data)
             self.completionSubject.send(completion: .finished)
+        }
+
+        let action = {
+            sendData(data)
             completion?()
+        }
+
+        if shouldDismiss {
+            dismiss(animated: animated, action)
+        } else {
+            action()
         }
     }
 
+    /// Dismiss coordinator
+    ///
+    /// - Parameters:
+    ///   - animated: Animated
+    ///   - completion: Completion callback
     public func dismiss(animated: Bool, _ completion: (() -> Void)?) {
         let done = {
             self.parent?._remove(coordinator: self)
