@@ -17,12 +17,16 @@ public enum PresentationStyle {
         // swiftlint:disable weak_delegate
         let transitioningDelegate: UIViewControllerTransitioningDelegate?
 
-        func apply(to vc: UIViewController) {
-            vc.modalPresentationStyle = presentation
-            vc.modalTransitionStyle = transition
+        func apply(to viewController: UIViewController) {
+            viewController.modalPresentationStyle = presentation
+            viewController.modalTransitionStyle = transition
         }
 
-        public init(navigated: Bool = false, animated: Bool = true, presentation: UIModalPresentationStyle = .fullScreen, transition: UIModalTransitionStyle = .coverVertical, delegate: UIViewControllerTransitioningDelegate? = nil) {
+        public init(navigated: Bool = false,
+                    animated: Bool = true,
+                    presentation: UIModalPresentationStyle = .fullScreen,
+                    transition: UIModalTransitionStyle = .coverVertical,
+                    delegate: UIViewControllerTransitioningDelegate? = nil) {
             self.navigated = navigated
             self.animated = animated
             self.presentation = presentation
@@ -49,54 +53,54 @@ public enum PresentationController {
 
     public var viewController: UIViewController {
         switch self {
-        case .navigation(let vc): return vc
-        case .regular(let vc): return vc
-        case .split(let vc): return vc
-        case .tab(let vc): return vc
+        case .navigation(let viewController): return viewController
+        case .regular(let viewController): return viewController
+        case .split(let viewController): return viewController
+        case .tab(let viewController): return viewController
         }
     }
 
     public var navigationController: UINavigationController? {
         switch self {
-        case .navigation(let vc): return vc
-        case .regular(let vc): return vc.navigationController
-        case .split(let vc): return vc.navigationController
-        case .tab(let vc): return vc.navigationController
+        case .navigation(let navigationController): return navigationController
+        case .regular(let viewController): return viewController.navigationController
+        case .split(let viewController): return viewController.navigationController
+        case .tab(let viewController): return viewController.navigationController
         }
     }
 
     public var tabBarController: UITabBarController? {
         switch self {
         case .navigation, .regular, .split: return nil
-        case .tab(let vc): return vc
+        case .tab(let tabBarController): return tabBarController
         }
     }
 
-    public func modal(_ vc: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
-        viewController.present(vc, animated: animated, completion: completion)
+    public func modal(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
+        viewController.present(viewController, animated: animated, completion: completion)
     }
 
-    public func push(_ vc: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
-        guard let nc = navigationController else {
+    public func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
+        guard let navigationController = navigationController else {
             fatalError("There is no navigationController in stack")
         }
 
-        nc.pushViewController(vc, animated: animated, completion)
+        navigationController.pushViewController(viewController, animated: animated, completion)
     }
 }
 
 public extension PresentationController {
-    init(auto vc: UIViewController) {
-        if let nav = vc.navigationController {
-            self = .navigation(nav)
-        } else if let nav = vc as? UINavigationController {
-            self = .navigation(nav)
-        } else if let tab = vc.tabBarController {
-            self = .tab(tab)
-        } else if let split = vc.splitViewController {
-            self = .split(split)
+    init(auto viewController: UIViewController) {
+        if let navigationController = viewController.navigationController {
+            self = .navigation(navigationController)
+        } else if let navigationController = viewController as? UINavigationController {
+            self = .navigation(navigationController)
+        } else if let tabBarController = viewController.tabBarController {
+            self = .tab(tabBarController)
+        } else if let splitViewController = viewController.splitViewController {
+            self = .split(splitViewController)
         } else {
-            self = .regular(vc)
+            self = .regular(viewController)
         }
     }
 }
@@ -112,8 +116,10 @@ public protocol Coordinator: AnyObject {
     /// Children Coordinators
     var children: [Coordinator] { get }
 
+    // swiftlint:disable identifier_name
     /// Service callback, shouldn't be used from a client code
     var _onDeinit: (() -> Void)? { get set }
+    // swiftlint:enable identifier_name
 
     /// Top coordinator being presented by this coordinator
     var presented: Coordinator? { get }
@@ -128,9 +134,11 @@ public protocol Coordinator: AnyObject {
     ///   - style: Presentation style
     func present(coordinator: Coordinator, style: PresentationStyle)
 
+    // swiftlint:disable identifier_name
     /// Remove coordinator. Shouldn't be called directly
     /// - Parameter coordinator: Coordinator to remove
     func _remove(coordinator: Coordinator)
+    // swiftlint:enable identifier_name
 
     /// Dismiss coordinator
     /// - Parameters:
@@ -160,7 +168,7 @@ public extension Coordinator {
 /// - 1: KeyController - a type of key controller. Usually it can be UIViewController, or specific.
 /// - 2: ResponseData - a type of returning data if your coordinator should return anything on its completion
 open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coordinator {
-    fileprivate(set) public var children: [Coordinator] = []
+    public fileprivate(set) var children: [Coordinator] = []
     public weak var keyViewController: KeyController? {
         didSet {
             keyViewController?.setDeinitNotification { [weak self] in
@@ -170,18 +178,18 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     }
     open var presentationController: PresentationController {
         switch keyViewController {
-        case let vc as UINavigationController:
-            return .navigation(vc)
-        case let vc as UITabBarController:
-            return .tab(vc)
-        case let vc as UISplitViewController:
-            return .split(vc)
+        case let viewController as UINavigationController:
+            return .navigation(viewController)
+        case let viewController as UITabBarController:
+            return .tab(viewController)
+        case let viewController as UISplitViewController:
+            return .split(viewController)
         default:
-            if let nc = keyViewController?.navigationController {
-                return .navigation(nc)
+            if let navigationController = keyViewController?.navigationController {
+                return .navigation(navigationController)
             } else {
-                if let vc = keyViewController {
-                    return .regular(vc)
+                if let viewController = keyViewController {
+                    return .regular(viewController)
                 } else {
                     preconditionFailure("""
 
@@ -202,13 +210,14 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     public var presented: Coordinator? {
         var result = children.last
 
-        while let c = result?.presented {
-            result = c
+        while let coordinator = result?.presented {
+            result = coordinator
         }
 
         return result
     }
 
+    // swiftlint:disable:next identifier_name
     @Once public var _onDeinit: (() -> Void)?
 
     /// Callback to pass value from the coordinator on its completion
@@ -231,6 +240,11 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 
     }
 
+    deinit {
+        // Add a Breakpoint whose action is Debugger Command is:
+        //      po NSString(format: "--- deinit: @\"<%@>\"", String(reflecting: self))
+    }
+
     open func start(style: PresentationStyle) {
         fatalError("""
 
@@ -240,7 +254,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
             """)
     }
 
-    public func present(controller: KeyController, style: PresentationStyle, completion:  @escaping () -> Void = {}) {
+    public func present(controller: KeyController, style: PresentationStyle, completion: @escaping () -> Void = {}) {
         assert(keyViewController == nil, """
 
             🔥>> This method should be called only once from `start(style:)` method of a coordinator
@@ -254,26 +268,26 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
             window.rootViewController = keyViewController
             window.makeKeyAndVisible()
         case let .modal(parameters):
-            let pc = parent!.presentationController
-            presentModal(parent: pc.viewController, parameters: parameters, completion: completion)
+            let presentationController = parent!.presentationController
+            presentModal(parent: presentationController.viewController, parameters: parameters, completion: completion)
         case .push:
-            let pc = parent!.presentationController
-            if let nc = pc.navigationController {
-                nc.pushViewController(controller, animated: true)
+            let presentationController = parent!.presentationController
+            if let navigationController = presentationController.navigationController {
+                navigationController.pushViewController(controller, animated: true)
             } else {
-                fatalError("Trying to present \(controller) into \(pc) without navigation controller")
+                fatalError("Trying to present \(controller) into \(presentationController) without navigation controller")
             }
         case let .pushOrModal(parameters: parameters):
-            let pc = parent!.presentationController
-            if let nc = pc.navigationController {
-                nc.pushViewController(controller, animated: true)
+            let presentationController = parent!.presentationController
+            if let navigationController = presentationController.navigationController {
+                navigationController.pushViewController(controller, animated: true)
             } else {
-                presentModal(parent: pc.viewController, parameters: parameters, completion: completion)
+                presentModal(parent: presentationController.viewController, parameters: parameters, completion: completion)
             }
         case .tab(let tabBarController):
-            var vcs: [UIViewController] = tabBarController.viewControllers ?? []
-            vcs.append(controller)
-            tabBarController.viewControllers = vcs
+            var viewControllers: [UIViewController] = tabBarController.viewControllers ?? []
+            viewControllers.append(controller)
+            tabBarController.viewControllers = viewControllers
         }
 
     }
@@ -325,13 +339,13 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 
         keyViewController.presentedViewController?.dismiss(animated: animated)
 
-        if let nc = keyViewController.navigationController {
-            if nc.viewControllers.first == keyViewController {
-                nc.dismiss(animated: animated, completion: done)
+        if let navigationController = keyViewController.navigationController {
+            if navigationController.viewControllers.first == keyViewController {
+                navigationController.dismiss(animated: animated, completion: done)
             } else {
-                if let index = nc.viewControllers.firstIndex(of: keyViewController) {
-                    let previous = nc.viewControllers[index - 1]
-                    nc.popToViewController(previous, animated: animated, done)
+                if let index = navigationController.viewControllers.firstIndex(of: keyViewController) {
+                    let previous = navigationController.viewControllers[index - 1]
+                    navigationController.popToViewController(previous, animated: animated, done)
                 } else {
                     assertionFailure("Inconsistent state: Basically impossible")
                 }
@@ -345,7 +359,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         children.last?.dismiss(animated: animated, completion)
     }
 
-    private func presentModal(parent: UIViewController, parameters: PresentationStyle.ModalParameters, completion:  @escaping () -> Void = {}) {
+    private func presentModal(parent: UIViewController, parameters: PresentationStyle.ModalParameters, completion: @escaping () -> Void = {}) {
         guard let keyViewController = keyViewController else {
             preconditionFailure("""
 
@@ -356,10 +370,10 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         }
         parameters.apply(to: keyViewController)
         if parameters.navigated {
-            let nc = UINavigationController(rootViewController: keyViewController)
-            parameters.apply(to: nc)
-            nc.transitioningDelegate = parameters.transitioningDelegate
-            parent.present(nc, animated: parameters.animated, completion: completion)
+            let navigationController = UINavigationController(rootViewController: keyViewController)
+            parameters.apply(to: navigationController)
+            navigationController.transitioningDelegate = parameters.transitioningDelegate
+            parent.present(navigationController, animated: parameters.animated, completion: completion)
         } else {
             keyViewController.transitioningDelegate = parameters.transitioningDelegate
             parent.present(keyViewController, animated: parameters.animated, completion: completion)
@@ -380,6 +394,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         coordinator.start(style: style)
     }
 
+    // swiftlint:disable:next identifier_name
     public func _remove(coordinator: Coordinator) {
         guard let index = children.firstIndex(where: { $0 === coordinator }) else { return }
         children.remove(at: index)
@@ -413,8 +428,8 @@ open class TabCoordinator<ResponseData>: BaseCoordinator<UITabBarController, Res
     }
 
     override public var presented: Coordinator? {
-        if let cc = children.last {
-            return cc
+        if let childCoord = children.last {
+            return childCoord
         } else {
             return activeCoordinator?.presented
         }
@@ -443,6 +458,5 @@ open class TabCoordinator<ResponseData>: BaseCoordinator<UITabBarController, Res
 
         coordinator.parent = self
         coordinator.start(style: .tab(controller))
-        print("present: ", coordinator)
     }
 }

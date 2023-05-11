@@ -19,17 +19,17 @@ extension UINavigationController {
         CATransaction.commit()
     }
 
-    func pushViewController(_ vc: UIViewController, animated: Bool = true, _ completion: (() -> Void)?) {
+    func pushViewController(_ viewController: UIViewController, animated: Bool = true, _ completion: (() -> Void)?) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completion)
-        self.pushViewController(vc, animated: animated)
+        self.pushViewController(viewController, animated: animated)
         CATransaction.commit()
     }
 
-    func popToViewController(_ vc: UIViewController, animated: Bool = true, _ completion: (() -> Void)?) {
+    func popToViewController(_ viewController: UIViewController, animated: Bool = true, _ completion: (() -> Void)?) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completion)
-        self.popToViewController(vc, animated: animated)
+        self.popToViewController(viewController, animated: animated)
         CATransaction.commit()
     }
 }
