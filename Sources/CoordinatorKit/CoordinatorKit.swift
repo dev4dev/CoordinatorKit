@@ -76,8 +76,8 @@ public enum PresentationController {
         }
     }
 
-    public func modal(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
-        viewController.present(viewController, animated: animated, completion: completion)
+    public func modal(_ modalVC: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
+        viewController.present(modalVC, animated: animated, completion: completion)
     }
 
     public func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
