@@ -423,3 +423,44 @@ open class TabCoordinator<ResponseData>: BaseCoordinator<UITabBarController, Res
         typedViewController.viewControllers = vcs
     }
 }
+
+// MARK: - SplitCoordinator
+@available(iOS 14.0, *)
+open class SplitCoordinator<ResponseData>: BaseCoordinator<UISplitViewController, ResponseData> {
+    public init() {
+        super.init(keyViewController: UISplitViewController())
+    }
+
+    public private(set) var primaryCoordinator: Coordinator?
+    public private(set) var secondaryCoordinator: Coordinator?
+
+    override public var presented: Coordinator? {
+        if let childCoord = children.last {
+            return childCoord
+        } else {
+            return primaryCoordinator?.presented ?? secondaryCoordinator?.presented
+        }
+    }
+
+    public func setPrimaryCoordinator(_ primary: Coordinator) {
+        primaryCoordinator = primary
+        (primary as? CoordinatorInternal)?._onDeinit = { [weak self, unowned primary] in
+            self?._remove(coordinator: primary)
+        }
+
+        primary.parent = self
+        typedViewController.setViewController(primary.keyViewController, for: .primary)
+        (primary as? CoordinatorInternal)?._didMoveToParent()
+    }
+
+    public func setSecondaryCoordinator(_ secondary: Coordinator) {
+        secondaryCoordinator = secondary
+        (secondary as? CoordinatorInternal)?._onDeinit = { [weak self, unowned secondary] in
+            self?._remove(coordinator: secondary)
+        }
+
+        secondary.parent = self
+        typedViewController.setViewController(secondary.keyViewController, for: .secondary)
+        (secondary as? CoordinatorInternal)?._didMoveToParent()
+    }
+}
