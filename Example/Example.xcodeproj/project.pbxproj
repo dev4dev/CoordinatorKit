@@ -13,7 +13,6 @@
 		638CFAA5252BAAA400938966 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFAA4252BAAA400938966 /* SceneDelegate.swift */; };
 		638CFAAC252BAAA500938966 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 638CFAAB252BAAA500938966 /* Assets.xcassets */; };
 		638CFAAF252BAAA500938966 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 638CFAAD252BAAA500938966 /* LaunchScreen.storyboard */; };
-		638CFABF252BAACC00938966 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFABE252BAACC00938966 /* AppCoordinator.swift */; };
 		638CFAC4252BAEEB00938966 /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFAC3252BAEEB00938966 /* RootCoordinator.swift */; };
 		638CFAC8252BAF9B00938966 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFAC7252BAF9B00938966 /* HomeCoordinator.swift */; };
 		638CFACC252BAFDC00938966 /* InventoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFACB252BAFDC00938966 /* InventoryCoordinator.swift */; };
@@ -22,7 +21,6 @@
 		638CFADF252BBAEB00938966 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFADE252BBAEB00938966 /* SettingsCoordinator.swift */; };
 		638CFAE2252BBB0200938966 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFAE1252BBB0200938966 /* SettingsViewController.swift */; };
 		6390BD05255C22CF00F95494 /* CoordinatorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6390BD04255C22CF00F95494 /* CoordinatorKit */; };
-		6390BD10255C247E00F95494 /* UIViewController+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */; };
 		6397F5E5253AC5EA005F785F /* SettingsExtraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6397F5E4253AC5EA005F785F /* SettingsExtraViewController.swift */; };
 		63AECFF0269780100069F100 /* MultiCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AECFEF269780100069F100 /* MultiCoordinator.swift */; };
 		63AECFF2269780380069F100 /* MultiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AECFF1269780380069F100 /* MultiViewController.swift */; };
@@ -38,7 +36,6 @@
 		638CFAAB252BAAA500938966 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		638CFAAE252BAAA500938966 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		638CFAB0252BAAA500938966 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		638CFABE252BAACC00938966 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		638CFAC3252BAEEB00938966 /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
 		638CFAC7252BAF9B00938966 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		638CFACB252BAFDC00938966 /* InventoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCoordinator.swift; sourceTree = "<group>"; };
@@ -47,7 +44,6 @@
 		638CFADE252BBAEB00938966 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		638CFAE1252BBB0200938966 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		6390BCFB255C22A400F95494 /* CoordinatorKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CoordinatorKit; path = ..; sourceTree = "<group>"; };
-		6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Additions.swift"; sourceTree = "<group>"; };
 		6397F5E4253AC5EA005F785F /* SettingsExtraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsExtraViewController.swift; sourceTree = "<group>"; };
 		63AECFEF269780100069F100 /* MultiCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiCoordinator.swift; sourceTree = "<group>"; };
 		63AECFF1269780380069F100 /* MultiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiViewController.swift; sourceTree = "<group>"; };
@@ -106,7 +102,6 @@
 				638CFAAB252BAAA500938966 /* Assets.xcassets */,
 				638CFAAD252BAAA500938966 /* LaunchScreen.storyboard */,
 				638CFAB0252BAAA500938966 /* Info.plist */,
-				6390BD0F255C247E00F95494 /* UIViewController+Additions.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -114,7 +109,6 @@
 		638CFABD252BAAC400938966 /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				638CFABE252BAACC00938966 /* AppCoordinator.swift */,
 				638CFAC3252BAEEB00938966 /* RootCoordinator.swift */,
 			);
 			path = Root;
@@ -233,7 +227,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				638CFABF252BAACC00938966 /* AppCoordinator.swift in Sources */,
 				638CFAD3252BB0AF00938966 /* InventoryViewController.swift in Sources */,
 				638CFAC4252BAEEB00938966 /* RootCoordinator.swift in Sources */,
 				638CFAE2252BBB0200938966 /* SettingsViewController.swift in Sources */,
@@ -242,7 +235,6 @@
 				63AECFF2269780380069F100 /* MultiViewController.swift in Sources */,
 				638CFAA3252BAAA400938966 /* AppDelegate.swift in Sources */,
 				638CFACC252BAFDC00938966 /* InventoryCoordinator.swift in Sources */,
-				6390BD10255C247E00F95494 /* UIViewController+Additions.swift in Sources */,
 				396E7CF1269E2DB9007D8C99 /* MixedViewController.swift in Sources */,
 				638CFAA5252BAAA400938966 /* SceneDelegate.swift in Sources */,
 				6397F5E5253AC5EA005F785F /* SettingsExtraViewController.swift in Sources */,
@@ -446,7 +438,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:hathway/CommonLib_iOS.git";
 			requirement = {
-				branch = spm;
+				branch = master;
 				kind = branch;
 			};
 		};

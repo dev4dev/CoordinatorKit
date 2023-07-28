@@ -20,12 +20,13 @@ enum SettingsStyle {
 final class HomeCoordinator: BaseCoordinator<UIViewController, Void> {
     private var subscriptions: Set<AnyCancellable> = .init()
 
-    override func start(style: PresentationStyle) {
+    init() {
         let vc = HomeViewController()
+        super.init(keyViewController: vc.navigated(style: .fullScreen))
         vc.action = { [unowned self] in
             self.settings(style: $0)
         }
-        present(controller: vc.navigated(), style: style)
+
     }
 
     private func settings(style: SettingsStyle) {

@@ -5,8 +5,8 @@
         "package": "CommonLib",
         "repositoryURL": "git@github.com:hathway/CommonLib_iOS.git",
         "state": {
-          "branch": "spm",
-          "revision": "ef4f8d7734262b97cb5d4cc095c23860ba682ad8",
+          "branch": "master",
+          "revision": "07305858de67779b3b016aafd43e515ecc34d72d",
           "version": null
         }
       },

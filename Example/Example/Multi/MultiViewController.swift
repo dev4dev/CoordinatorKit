@@ -9,6 +9,9 @@ import UIKit
 
 final class MultiViewController: UIViewController {
 
+    deinit {
+        print("☠️ dead \(self)")
+    }
     var close: (() -> Void)?
 
     override func viewDidLoad() {

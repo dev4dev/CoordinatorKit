@@ -9,11 +9,12 @@ import UIKit
 import CoordinatorKit
 
 final class MixedCoordinator: BaseCoordinator<UIViewController, Void> {
-    override func start(style: PresentationStyle) {
+    init() {
         let vc = MixedViewController()
+        super.init(keyViewController: vc)
+
         vc.close = { [unowned self] in
             self.dismiss(animated: true)
         }
-        present(controller: vc, style: style)
     }
 }

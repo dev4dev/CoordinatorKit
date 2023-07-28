@@ -9,8 +9,8 @@ import UIKit
 import CoordinatorKit
 
 final class InventoryCoordinator: BaseCoordinator<UIViewController, Void> {
-    override func start(style: PresentationStyle) {
-        present(controller: InventoryViewController().navigated(), style: style)
+    init() {
+        super.init(keyViewController: InventoryViewController().navigated(style: .fullScreen))
     }
 }
 

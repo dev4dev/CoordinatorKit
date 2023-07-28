@@ -9,11 +9,16 @@ import UIKit
 import CoordinatorKit
 
 final class MultiCoordinator: BaseCoordinator<UIViewController, Void> {
-    override func start(style: PresentationStyle) {
+    deinit {
+        print("☠️ dead \(self)")
+    }
+
+    init() {
         let vc = MultiViewController()
+        super.init(keyViewController: vc)
+
         vc.close = { [unowned self] in
             self.dismiss(animated: true)
         }
-        present(controller: vc, style: style)
     }
 }

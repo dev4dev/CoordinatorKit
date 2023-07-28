@@ -13,15 +13,16 @@ final class SettingsCoordinator: BaseCoordinator<UIViewController, Void> {
         print("☠️ dead \(self)")
     }
 
-    override func start(style: PresentationStyle) {
+    init() {
         let vc = SettingsViewController()
+        super.init(keyViewController: vc)
+
         vc.completionCallback = { [unowned self] in
             self.complete()
         }
         vc.extraCallback = { [unowned self] in
             self.extra()
         }
-        present(controller: vc, style: style)
     }
 
     private func extra() {

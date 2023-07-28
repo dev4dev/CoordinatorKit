@@ -8,6 +8,10 @@
 import UIKit
 
 final class MixedViewController: UIViewController {
+    deinit {
+        print("☠️ dead \(self)")
+    }
+
     var close: (() -> Void)?
 
     override func viewDidLoad() {
@@ -28,7 +32,7 @@ final class MixedViewController: UIViewController {
             let vc = MixedViewController()
             vc.modalPresentationStyle = .fullScreen
             vc.close = self.close
-            self.navigationController?.present(vc, animated: true)
+            self.navigationController?.present(vc.navigated(style: .fullScreen), animated: true)
         })).then {
             $0.setTitle("Modal", for: .normal)
             $0.setTitleColor(.black, for: .normal)

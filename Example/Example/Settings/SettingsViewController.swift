@@ -50,7 +50,7 @@ final class SettingsViewController: UIViewController {
     }
 
     @objc private func closeAction(_ sender: UIBarButtonItem) {
-        smartDismiss()
+        smartDismiss(animated: true)
     }
 
 }
