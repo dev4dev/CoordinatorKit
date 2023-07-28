@@ -8,6 +8,10 @@
 import UIKit
 import CommonLib
 
+extension Notification.Name {
+    static let userChanged: Self = .init("usreChanged")
+}
+
 final class InventoryViewController: UIViewController {
 
     init() {
@@ -24,6 +28,20 @@ final class InventoryViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .white
+
+        let user = UserDefaults.standard.bool(forKey: "user")
+
+        let button = UIButton(primaryAction: .init(title: user ? "Logout" : "Login", handler: { _ in
+            if user {
+                UserDefaults.standard.removeObject(forKey: "user")
+            } else {
+                UserDefaults.standard.set(true, forKey: "user")
+            }
+            NotificationCenter.default.post(name: .userChanged, object: nil)
+        }))
+        view.addSubview(button) { make in
+            make.center.equalToSuperview()
+        }
     }
 
 }

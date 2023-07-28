@@ -123,10 +123,74 @@ private protocol CoordinatorInternal: AnyObject {
 
     /// Called after coordinator is presented. Do not call it manually
     func _didMoveToParent()
+
+    func _notifyDismissEvents()
 }
 // swiftlint:enable identifier_name
 
-public protocol Coordinator: AnyObject {
+public protocol CoreCoordinator: AnyObject {
+//    var keyViewController: UIViewController { get }
+//
+//    /// Presentation controller to be used as a parameter in child coordinators presentation methods
+//    var presentationController: PresentationController { get }
+
+//    /// Parent coordinator
+//    var parent: Coordinator? { get set }
+
+//    /// Children Coordinators
+//    var children: [Coordinator] { get }
+
+    /// Top coordinator being presented by this coordinator
+    var presented: Coordinator? { get }
+
+//    /// Presents child coordinators
+//    /// - Parameters:
+//    ///   - coordinator: Child coordinator to present
+//    ///   - style: Presentation style
+//    func present(coordinator: Coordinator, style: PresentationStyle)
+
+    /// Dismiss coordinator
+    /// - Parameters:
+    ///   - animated: Animated
+    ///   - completion: Completion callback
+//    func dismiss(animated: Bool, _ completion: (() -> Void)?)
+//
+//    /// Pop child coordinator
+//    /// - Parameters:
+//    ///   - animated: Animated
+//    ///   - completion: Completion callback
+//    func popChildCoordinator(animated: Bool, _ completion: @escaping () -> Void)
+}
+
+public final class AppCoordinator: CoreCoordinator {
+
+    public static let shared: AppCoordinator = .init()
+
+    private init() {
+
+    }
+
+    private unowned var window: UIWindow?
+    public func configure(with window: UIWindow, start: (AppCoordinator) -> Void) {
+        self.window = window
+        start(self)
+    }
+
+    public var presented: Coordinator?
+
+    public func present(coordinator: Coordinator) {
+        if let presented {
+            (presented as? CoordinatorInternal)?._notifyDismissEvents()
+        }
+
+        self.presented = coordinator
+        window?.rootViewController = coordinator.keyViewController
+        (coordinator as? CoordinatorInternal)?._didMoveToParent()
+        window?.makeKeyAndVisible()
+    }
+}
+
+public protocol Coordinator: CoreCoordinator {
 
     var keyViewController: UIViewController { get }
 
@@ -139,9 +203,9 @@ public protocol Coordinator: AnyObject {
     /// Children Coordinators
     var children: [Coordinator] { get }
 
-    /// Top coordinator being presented by this coordinator
-    var presented: Coordinator? { get }
-
+//    /// Top coordinator being presented by this coordinator
+//    var presented: Coordinator? { get }
+//
     /// Presents child coordinators
     /// - Parameters:
     ///   - coordinator: Child coordinator to present
@@ -225,7 +289,13 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     func _remove(coordinator: Coordinator) {
         guard let index = children.firstIndex(where: { $0 === coordinator }) else { return }
         children.remove(at: index)
-        (coordinator as? BaseCoordinator)?.notifyDismissEvents()
+        (coordinator as? CoordinatorInternal)?._notifyDismissEvents()
+    }
+
+    func _notifyDismissEvents() {
+        dismissCallback?()
+        dismissSubject.send()
+        dismissSubject.send(completion: .finished)
     }
     // MARK: -
 
@@ -360,18 +430,11 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         (coordinator as? CoordinatorInternal)?._didMoveToParent()
     }
 
-    public func makeRootCoordinator(window: UIWindow) {
-        window.rootViewController = keyViewController
-        window.makeKeyAndVisible()
-        _didMoveToParent()
-    }
-
-    // MARK: - Private
-    private func notifyDismissEvents() {
-        dismissCallback?()
-        dismissSubject.send()
-        dismissSubject.send(completion: .finished)
-    }
+//    public func makeRootCoordinator(window: UIWindow) {
+//        window.rootViewController = keyViewController
+//        window.makeKeyAndVisible()
+//        _didMoveToParent()
+//    }
 }
 
 public extension BaseCoordinator where ResponseData == Void {
