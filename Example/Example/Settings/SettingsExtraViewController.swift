@@ -29,7 +29,7 @@ final class SettingsExtraViewController: UIViewController {
         view.backgroundColor = .purple
 
         let b = UIButton().then {
-            $0.setTitle("Close", for: .normal)
+            $0.setTitle("Pop", for: .normal)
             $0.setTitleColor(.white, for: .normal)
         }
         b.addAction(.init(handler: { [unowned self] _ in

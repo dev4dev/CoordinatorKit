@@ -36,7 +36,7 @@ final class SettingsViewController: UIViewController {
         }
 
         let extra = UIButton().then {
-            $0.setTitle("Extra", for: .normal)
+            $0.setTitle("Push Extra", for: .normal)
             $0.setTitleColor(.black, for: .normal)
         }
         extra.addAction(.init(handler: { [unowned self] _ in
