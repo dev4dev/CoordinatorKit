@@ -24,9 +24,9 @@ final class AppStarter: AppStartConfigurator {
 
     private func setup(coordinator: AppCoordinator) {
         if UserDefaults.standard.bool(forKey: "user") {
-            coordinator.present(coordinator: RootCoordinator(), animated: false)
+            coordinator.present(coordinator: RootCoordinator(), animated: true)
         } else {
-            coordinator.present(coordinator: InventoryCoordinator(), animated: false)
+            coordinator.present(coordinator: InventoryCoordinator(), animated: true)
         }
     }
 }

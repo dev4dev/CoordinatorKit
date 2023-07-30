@@ -216,6 +216,7 @@ public final class AppCoordinator: CoreCoordinator {
     }
 
     private unowned var window: UIWindow?
+
     /// Configure AppCoordinator
     /// - Parameters:
     ///   - window: The main app Window
@@ -223,6 +224,25 @@ public final class AppCoordinator: CoreCoordinator {
     public func configure(with window: UIWindow, starter: any AppStartConfigurator.Type) {
         self.window = window
         configurator = starter.init(coordinator: self)
+    }
+
+    /// Configure AppCoordinator
+    /// - Parameters:
+    ///   - window: The main app Window
+    ///   - setup: Closure where an initial coordinator should be presented
+    public func configure(with window: UIWindow, setup: (AppCoordinator) -> Void) {
+        self.window = window
+        setup(self)
+    }
+
+    /// Configure AppCoordinator
+    /// - Parameters:
+    ///   - window: The main app Window
+    ///   - coordinator: Root coordinator
+    public func configure<C: Coordinator>(with window: UIWindow, coordinator: C) {
+        self.window = window
+
+        present(coordinator: coordinator, animated: true)
     }
 
     /// Active root coodinator, which keyViewController is set as rootViewController on the window
