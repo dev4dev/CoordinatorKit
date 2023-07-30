@@ -88,7 +88,8 @@ public enum PresentationController {
 
     public func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
         guard let navigationController = navigationController else {
-            fatalError("There is no navigationController in stack")
+            assertionFailure("There is no navigationController in view hierarchy")
+            return
         }
 
         navigationController.pushViewController(viewController, animated: animated, completion)
@@ -96,19 +97,36 @@ public enum PresentationController {
 }
 
 public extension PresentationController {
-    init(auto viewController: UIViewController) {
-        if let navigationController = viewController.navigationController {
-            self = .navigation(navigationController)
-        } else if let navigationController = viewController as? UINavigationController {
-            self = .navigation(navigationController)
-        } else if let tabBarController = viewController.tabBarController {
-            self = .tab(tabBarController)
-        } else if let splitViewController = viewController.splitViewController {
-            self = .split(splitViewController)
-        } else {
-            self = .regular(viewController)
+    init(viewController: UIViewController) {
+        switch viewController {
+        case let viewController as UINavigationController:
+            self = .navigation(viewController)
+        case let viewController as UISplitViewController:
+            self = .split(viewController)
+        case let viewController as UITabBarController:
+            self = .tab(viewController)
+        default:
+            if let navigationController = viewController.navigationController {
+                self = .navigation(navigationController)
+            } else {
+                self = .regular(viewController)
+            }
         }
     }
+
+//    init(auto viewController: UIViewController) {
+//        if let navigationController = viewController.navigationController {
+//            self = .navigation(navigationController)
+//        } else if let navigationController = viewController as? UINavigationController {
+//            self = .navigation(navigationController)
+//        } else if let tabBarController = viewController.tabBarController {
+//            self = .tab(tabBarController)
+//        } else if let splitViewController = viewController.splitViewController {
+//            self = .split(splitViewController)
+//        } else {
+//            self = .regular(viewController)
+//        }
+//    }
 }
 
 // swiftlint:disable identifier_name
@@ -129,73 +147,18 @@ private protocol CoordinatorInternal: AnyObject {
 // swiftlint:enable identifier_name
 
 public protocol CoreCoordinator: AnyObject {
-//    var keyViewController: UIViewController { get }
-//
-//    /// Presentation controller to be used as a parameter in child coordinators presentation methods
-//    var presentationController: PresentationController { get }
-
-//    /// Parent coordinator
-//    var parent: Coordinator? { get set }
-
-//    /// Children Coordinators
-//    var children: [Coordinator] { get }
+    /// Presentation controller to be used as a parameter in child coordinators presentation methods
+    var presentationController: PresentationController { get }
 
     /// Top coordinator being presented by this coordinator
     var presented: Coordinator? { get }
-
-//    /// Presents child coordinators
-//    /// - Parameters:
-//    ///   - coordinator: Child coordinator to present
-//    ///   - style: Presentation style
-//    func present(coordinator: Coordinator, style: PresentationStyle)
-
-    /// Dismiss coordinator
-    /// - Parameters:
-    ///   - animated: Animated
-    ///   - completion: Completion callback
-//    func dismiss(animated: Bool, _ completion: (() -> Void)?)
-//
-//    /// Pop child coordinator
-//    /// - Parameters:
-//    ///   - animated: Animated
-//    ///   - completion: Completion callback
-//    func popChildCoordinator(animated: Bool, _ completion: @escaping () -> Void)
 }
 
-public final class AppCoordinator: CoreCoordinator {
-
-    public static let shared: AppCoordinator = .init()
-
-    private init() {
-
-    }
-
-    private unowned var window: UIWindow?
-    public func configure(with window: UIWindow, start: (AppCoordinator) -> Void) {
-        self.window = window
-        start(self)
-    }
-
-    public var presented: Coordinator?
-
-    public func present(coordinator: Coordinator) {
-        if let presented {
-            (presented as? CoordinatorInternal)?._notifyDismissEvents()
-        }
-
-        self.presented = coordinator
-        window?.rootViewController = coordinator.keyViewController
-        (coordinator as? CoordinatorInternal)?._didMoveToParent()
-        window?.makeKeyAndVisible()
-    }
-}
 
 public protocol Coordinator: CoreCoordinator {
 
+    /// Key ViewController of a Coordinator
     var keyViewController: UIViewController { get }
-
-    /// Presentation controller to be used as a parameter in child coordinators presentation methods
-    var presentationController: PresentationController { get }
 
     /// Parent coordinator
     var parent: Coordinator? { get set }
@@ -203,13 +166,17 @@ public protocol Coordinator: CoreCoordinator {
     /// Children Coordinators
     var children: [Coordinator] { get }
 
-//    /// Top coordinator being presented by this coordinator
-//    var presented: Coordinator? { get }
-//
     /// Presents child coordinators
     /// - Parameters:
     ///   - coordinator: Child coordinator to present
     ///   - style: Presentation style
+    ///
+    ///         let loginCoordinator = LoginCoordinator()
+    ///         loginCoordinator.completionCallback = { userInfo in
+    ///             print("DONE: \(userInfo)")
+    ///         }
+    ///         present(coordinator: loginCoordinator, style: .push)
+    ///
     func present(coordinator: Coordinator, style: PresentationStyle)
 
     /// Dismiss coordinator
@@ -223,6 +190,64 @@ public protocol Coordinator: CoreCoordinator {
     ///   - animated: Animated
     ///   - completion: Completion callback
     func popChildCoordinator(animated: Bool, _ completion: @escaping () -> Void)
+}
+
+public protocol AppStartConfigurator {
+    init(coordinator: AppCoordinator)
+}
+
+/// A coordinator that serves a role of a root coordinator to use for presenting other coordinators
+public final class AppCoordinator: CoreCoordinator {
+
+    public static let shared: AppCoordinator = .init()
+
+    private var configurator: (any AppStartConfigurator)?
+
+    public var presentationController: PresentationController {
+        guard let viewController = presented?.keyViewController else {
+            preconditionFailure("You need to present coordinator first")
+        }
+
+        return .init(viewController: viewController)
+    }
+
+    private init() {
+        // no-op
+    }
+
+    private unowned var window: UIWindow?
+    /// Configure AppCoordinator
+    /// - Parameters:
+    ///   - window: The main app Window
+    ///   - starter: A type that configures app startup
+    public func configure(with window: UIWindow, starter: any AppStartConfigurator.Type) {
+        self.window = window
+        configurator = starter.init(coordinator: self)
+    }
+
+    /// Active root coodinator, which keyViewController is set as rootViewController on the window
+    public var presented: Coordinator?
+
+    /// Present coordinator. KeyViewController from the coordinator will be set as a rootViewController on the window
+    /// - Parameters:
+    ///   - coordinator: Coordinator
+    ///   - animated: Animated
+    public func present(coordinator: Coordinator, animated: Bool) {
+        if let presented {
+            (presented as? CoordinatorInternal)?._notifyDismissEvents()
+        }
+
+        self.presented = coordinator
+
+        if let window {
+            UIView.transition(with: window, duration: animated ? 0.35 : 0.0, options: .transitionCrossDissolve, animations: {
+                window.rootViewController = coordinator.keyViewController
+            })
+        }
+
+        (coordinator as? CoordinatorInternal)?._didMoveToParent()
+        window?.makeKeyAndVisible()
+    }
 }
 
 public extension Coordinator {
@@ -249,18 +274,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     @Weakify
     public var typedViewController: KeyController
     open var presentationController: PresentationController {
-        switch keyViewController {
-        case let viewController as UINavigationController:
-            return .navigation(viewController)
-        case let viewController as UISplitViewController:
-            return .split(viewController)
-        default:
-            if let navigationController = keyViewController.navigationController {
-                return .navigation(navigationController)
-            } else {
-                return .regular(keyViewController)
-            }
-        }
+        .init(viewController: keyViewController)
     }
 
     /// Parent coordinator
@@ -279,7 +293,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 
     // MARK: - Internal
     // swiftlint:disable:next identifier_name
-    @Once var _onDeinit: (() -> Void)?
+    @SettableOnce var _onDeinit: (() -> Void)?
 
     func _didMoveToParent() {
         _typedViewController.weakify()
@@ -317,6 +331,10 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
 
     public init(keyViewController: KeyController) {
         self._typedViewController = .init(wrappedValue: keyViewController)
+        makeConnectionToViewControllerLifecycle()
+    }
+
+    private func makeConnectionToViewControllerLifecycle() {
         typedViewController.setDeinitNotification { [weak self] in
             self?._onDeinit?()
         }
@@ -418,7 +436,8 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     public func present(coordinator: Coordinator, style: PresentationStyle) {
         guard !children.contains(where: { $0 === coordinator }) else { return }
         guard (coordinator as? CoordinatorInternal)?._onDeinit == nil else {
-            fatalError("onDeinit shouldn't be set manually")
+            assertionFailure("onDeinit should be nil. Was this coordinator presented before?")
+            return
         }
         (coordinator as? CoordinatorInternal)?._onDeinit = { [weak self, unowned coordinator] in
             self?._remove(coordinator: coordinator)
@@ -429,12 +448,6 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         present(controller: coordinator.keyViewController, style: style)
         (coordinator as? CoordinatorInternal)?._didMoveToParent()
     }
-
-//    public func makeRootCoordinator(window: UIWindow) {
-//        window.rootViewController = keyViewController
-//        window.makeKeyAndVisible()
-//        _didMoveToParent()
-//    }
 }
 
 public extension BaseCoordinator where ResponseData == Void {
@@ -489,6 +502,7 @@ open class TabCoordinator<ResponseData>: BaseCoordinator<UITabBarController, Res
 
 // MARK: - SplitCoordinator
 @available(iOS 14.0, *)
+@available(*, message: "Under development")
 open class SplitCoordinator<ResponseData>: BaseCoordinator<UISplitViewController, ResponseData> {
     public init() {
         super.init(keyViewController: UISplitViewController())

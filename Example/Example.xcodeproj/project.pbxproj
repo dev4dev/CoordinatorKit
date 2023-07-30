@@ -3,12 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		396E7CF0269E2DB6007D8C99 /* MixedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396E7CEE269E2CFF007D8C99 /* MixedCoordinator.swift */; };
 		396E7CF1269E2DB9007D8C99 /* MixedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396E7CEF269E2D01007D8C99 /* MixedViewController.swift */; };
+		6371EBDE2A76852000E4C3F0 /* AppStarter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6371EBDD2A76852000E4C3F0 /* AppStarter.swift */; };
 		638CFAA3252BAAA400938966 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFAA2252BAAA400938966 /* AppDelegate.swift */; };
 		638CFAA5252BAAA400938966 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CFAA4252BAAA400938966 /* SceneDelegate.swift */; };
 		638CFAAC252BAAA500938966 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 638CFAAB252BAAA500938966 /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		396E7CEE269E2CFF007D8C99 /* MixedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixedCoordinator.swift; sourceTree = "<group>"; };
 		396E7CEF269E2D01007D8C99 /* MixedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixedViewController.swift; sourceTree = "<group>"; };
+		6371EBDD2A76852000E4C3F0 /* AppStarter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStarter.swift; sourceTree = "<group>"; };
 		638CFA9F252BAAA400938966 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		638CFAA2252BAAA400938966 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		638CFAA4252BAAA400938966 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				638CFACA252BAFD000938966 /* Inventory */,
 				638CFAC6252BAF9200938966 /* Home */,
 				638CFABD252BAAC400938966 /* Root */,
+				6371EBDD2A76852000E4C3F0 /* AppStarter.swift */,
 				638CFAA2252BAAA400938966 /* AppDelegate.swift */,
 				638CFAA4252BAAA400938966 /* SceneDelegate.swift */,
 				638CFAAB252BAAA500938966 /* Assets.xcassets */,
@@ -181,8 +184,9 @@
 		638CFA97252BAAA400938966 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					638CFA9E252BAAA400938966 = {
 						CreatedOnToolsVersion = 12.0;
@@ -232,6 +236,7 @@
 				638CFAE2252BBB0200938966 /* SettingsViewController.swift in Sources */,
 				638CFAD0252BB07800938966 /* HomeViewController.swift in Sources */,
 				638CFADF252BBAEB00938966 /* SettingsCoordinator.swift in Sources */,
+				6371EBDE2A76852000E4C3F0 /* AppStarter.swift in Sources */,
 				63AECFF2269780380069F100 /* MultiViewController.swift in Sources */,
 				638CFAA3252BAAA400938966 /* AppDelegate.swift in Sources */,
 				638CFACC252BAFDC00938966 /* InventoryCoordinator.swift in Sources */,

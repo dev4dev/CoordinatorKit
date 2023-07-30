@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Wrapper that allows to switch a strong property to weak
 @propertyWrapper
 public final class Weakify<T: AnyObject> {
     public var wrappedValue: T {

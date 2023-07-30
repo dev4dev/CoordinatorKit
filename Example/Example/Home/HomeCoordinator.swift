@@ -26,7 +26,6 @@ final class HomeCoordinator: BaseCoordinator<UIViewController, Void> {
         vc.action = { [unowned self] in
             self.settings(style: $0)
         }
-
     }
 
     private func settings(style: SettingsStyle) {
