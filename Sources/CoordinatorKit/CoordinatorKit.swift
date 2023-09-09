@@ -415,25 +415,20 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     ///   - animated: Animated
     ///   - completion: Completion callback
     public func dismiss(animated: Bool, _ completion: (() -> Void)?) {
-        let done = {
-            (self.parent as? CoordinatorInternal)?._remove(coordinator: self)
-            completion?()
-        }
-
-        self.keyViewController.dismissAllPresentedControllers(animated: false) {
+        keyViewController.dismissAllPresentedControllers(animated: false) {
             if let navigationController = self.keyViewController.navigationController {
                 if navigationController.viewControllers.first == self.keyViewController {
-                    navigationController.dismiss(animated: animated, completion: done)
+                    navigationController.dismiss(animated: animated, completion: completion)
                 } else {
                     if let index = navigationController.viewControllers.firstIndex(of: self.keyViewController) {
                         let previous = navigationController.viewControllers[index - 1]
-                        navigationController.popToViewController(previous, animated: animated, done)
+                        navigationController.popToViewController(previous, animated: animated, completion)
                     } else {
                         assertionFailure("Inconsistent state: Basically impossible")
                     }
                 }
             } else {
-                self.keyViewController.dismiss(animated: animated, completion: done)
+                self.keyViewController.dismiss(animated: animated, completion: completion)
             }
         }
     }
