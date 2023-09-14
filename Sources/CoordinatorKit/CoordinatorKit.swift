@@ -254,6 +254,7 @@ public final class AppCoordinator: CoreCoordinator {
     ///   - animated: Animated
     public func present(coordinator: Coordinator, animated: Bool) {
         if let presented {
+            // If there is already presented coordinator, then notify it before removing
             (presented as? CoordinatorInternal)?._notifyDismissEvents()
         }
 
@@ -380,6 +381,14 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         }
     }
 
+    /// Make the passed coordinator remove itself from the parent
+    /// - Parameter coordinator: Coordinator
+    fileprivate func connectDeInit(for coordinator: Coordinator) {
+        (coordinator as? CoordinatorInternal)?._onDeinit = { [weak self, unowned coordinator] in
+            self?._remove(coordinator: coordinator)
+        }
+    }
+
     /// Complete coordinator
     ///
     /// Will send response data to a receiver
@@ -417,13 +426,16 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
     public func dismiss(animated: Bool, _ completion: (() -> Void)?) {
         keyViewController.dismissAllPresentedControllers(animated: false) {
             if let navigationController = self.keyViewController.navigationController {
+                // if the controller is the only controller in NavController then dismiss this nav controller
                 if navigationController.viewControllers.first == self.keyViewController {
                     navigationController.dismiss(animated: animated, completion: completion)
                 } else {
+                    // Otherwise remove all the controllers up to the controller that is previous to the current
                     if let index = navigationController.viewControllers.firstIndex(of: self.keyViewController) {
                         let previous = navigationController.viewControllers[index - 1]
                         navigationController.popToViewController(previous, animated: animated, completion)
                     } else {
+                        // We are in NavController that doesn't have the current one in it
                         assertionFailure("Inconsistent state: Basically impossible")
                     }
                 }
@@ -448,15 +460,13 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
         }
     }
 
-    public func present(coordinator: Coordinator, style: PresentationStyle) {
+    public func present(coordinator: any Coordinator, style: PresentationStyle) {
         guard !children.contains(where: { $0 === coordinator }) else { return }
         guard (coordinator as? CoordinatorInternal)?._onDeinit == nil else {
             assertionFailure("onDeinit should be nil. Was this coordinator presented before?")
             return
         }
-        (coordinator as? CoordinatorInternal)?._onDeinit = { [weak self, unowned coordinator] in
-            self?._remove(coordinator: coordinator)
-        }
+        connectDeInit(for: coordinator)
         children.append(coordinator)
 
         coordinator.parent = self
@@ -500,9 +510,7 @@ open class TabCoordinator<ResponseData>: BaseCoordinator<UITabBarController, Res
     public func setupTabs(coordinators: [Coordinator]) {
         let vcs = coordinators.compactMap { coordinator -> UIViewController? in
             guard tabCoordinators.first(where: { $0 === coordinator}) == nil else { return nil }
-            (coordinator as? CoordinatorInternal)?._onDeinit = { [weak self, unowned coordinator] in
-                self?._remove(coordinator: coordinator)
-            }
+            connectDeInit(for: coordinator)
             tabCoordinators.append(coordinator)
 
             coordinator.parent = self
@@ -536,22 +544,18 @@ open class SplitCoordinator<ResponseData>: BaseCoordinator<UISplitViewController
 
     public func setPrimaryCoordinator(_ primary: Coordinator) {
         primaryCoordinator = primary
-        (primary as? CoordinatorInternal)?._onDeinit = { [weak self, unowned primary] in
-            self?._remove(coordinator: primary)
-        }
-
+        connectDeInit(for: primary)
         primary.parent = self
+
         typedViewController.setViewController(primary.keyViewController, for: .primary)
         (primary as? CoordinatorInternal)?._didMoveToParent()
     }
 
     public func setSecondaryCoordinator(_ secondary: Coordinator) {
         secondaryCoordinator = secondary
-        (secondary as? CoordinatorInternal)?._onDeinit = { [weak self, unowned secondary] in
-            self?._remove(coordinator: secondary)
-        }
-
+        connectDeInit(for: secondary)
         secondary.parent = self
+
         typedViewController.setViewController(secondary.keyViewController, for: .secondary)
         (secondary as? CoordinatorInternal)?._didMoveToParent()
     }
