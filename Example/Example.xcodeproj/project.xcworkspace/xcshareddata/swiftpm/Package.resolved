@@ -2,21 +2,30 @@
   "object": {
     "pins": [
       {
-        "package": "CommonLib",
-        "repositoryURL": "git@github.com:hathway/CommonLib_iOS.git",
+        "package": "LayoutKit",
+        "repositoryURL": "https://github.com/dev4dev/LayoutKit",
         "state": {
-          "branch": "master",
-          "revision": "07305858de67779b3b016aafd43e515ecc34d72d",
-          "version": null
+          "branch": null,
+          "revision": "06de1ca46b9d5bd2ca2b04bf3ed5eb5a3242f4ce",
+          "version": "0.0.1"
         }
       },
       {
         "package": "SnapKit",
-        "repositoryURL": "https://github.com/SnapKit/SnapKit.git",
+        "repositoryURL": "git@github.com:SnapKit/SnapKit.git",
         "state": {
           "branch": null,
-          "revision": "f222cbdf325885926566172f6f5f06af95473158",
-          "version": "5.6.0"
+          "revision": "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
+          "version": "5.7.1"
+        }
+      },
+      {
+        "package": "Then",
+        "repositoryURL": "https://github.com/devxoul/Then",
+        "state": {
+          "branch": null,
+          "revision": "d41ef523faef0f911369f79c0b96815d9dbb6d7a",
+          "version": "3.0.0"
         }
       }
     ]

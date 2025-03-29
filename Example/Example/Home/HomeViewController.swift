@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import CommonLib
+import LayoutKit
 import SnapKit
 
 final class HomeViewController: UIViewController {
