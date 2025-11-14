@@ -104,7 +104,7 @@ open class BaseCoordinator<KeyController: UIViewController, ResponseData>: Coord
             if let navigationController = presentationController.navigationController {
                 navigationController.pushViewController(controller, animated: true)
             } else {
-                presentModal(vc: presentationController.viewController, parameters: parameters, completion: completion)
+                presentModal(vc: controller, parameters: parameters, completion: completion)
             }
         }
     }
