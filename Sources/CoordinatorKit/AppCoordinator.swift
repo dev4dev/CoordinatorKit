@@ -8,6 +8,7 @@
 import UIKit
 
 /// A coordinator that serves a role of a root coordinator to use for presenting other coordinators
+@MainActor
 public final class AppCoordinator: CoreCoordinator {
 
     public static let shared: AppCoordinator = .init()

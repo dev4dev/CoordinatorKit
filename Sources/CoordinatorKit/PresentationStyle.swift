@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import ObjectiveC.runtime
 
+@MainActor
 public enum PresentationStyle {
+    @MainActor
     public struct ModalParameters {
         let presentation: UIModalPresentationStyle
         let transition: UIModalTransitionStyle
@@ -16,10 +19,25 @@ public enum PresentationStyle {
         // swiftlint:disable:next weak_delegate
         let transitioningDelegate: UIViewControllerTransitioningDelegate?
 
+        @MainActor
+        private enum AssociatedKeys {
+            static var transitionDelegate = "CoordinatorKit.ModalParameters.transitionDelegate"
+        }
+
         func apply(to viewController: UIViewController) {
             viewController.modalPresentationStyle = presentation
             viewController.modalTransitionStyle = transition
             viewController.transitioningDelegate = transitioningDelegate
+            withUnsafePointer(to: AssociatedKeys.transitionDelegate) {
+                if let transitioningDelegate {
+                    objc_setAssociatedObject(
+                        viewController,
+                        $0,
+                        transitioningDelegate,
+                        .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+                    )
+                }
+            }
         }
 
         public init(navigated: Bool = false,

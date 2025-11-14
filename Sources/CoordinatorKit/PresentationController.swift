@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public enum PresentationController {
     case regular(UIViewController)
     case navigation(UINavigationController)

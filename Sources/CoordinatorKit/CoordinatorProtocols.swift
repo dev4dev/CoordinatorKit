@@ -8,6 +8,7 @@
 import UIKit
 
 // swiftlint:disable identifier_name
+@MainActor
 protocol CoordinatorInternal: AnyObject {
     /// Service callback, shouldn't be used from a client code
     var _onDeinit: (() -> Void)? { get set }
@@ -24,6 +25,7 @@ protocol CoordinatorInternal: AnyObject {
 }
 // swiftlint:enable identifier_name
 
+@MainActor
 public protocol CoreCoordinator: AnyObject {
     /// Presentation controller to be used as a parameter in child coordinators presentation methods
     var presentationController: PresentationController { get }
@@ -80,7 +82,7 @@ public extension Coordinator {
 }
 
 // MARK: -
-
+@MainActor
 public protocol AppStartConfigurator {
     init(coordinator: AppCoordinator)
 }
